@@ -5,7 +5,7 @@ import RegisterStudent from "./RegisterStudent";
 import { useNavigate } from "react-router-dom";
 
 const Header = () => {
-  const isAuth = isUserLoggedIn();
+  const isAuth = true;
   const role = getRole();
 
   const navigate = useNavigate();

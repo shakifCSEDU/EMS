@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App";
 import { getToken } from "./AuthService";
 import axios from "axios";
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -17,8 +19,9 @@ axios.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
 root.render(
-  <>
+  <Provider store={store}>
     <App />
-  </>
+  </Provider>
 );

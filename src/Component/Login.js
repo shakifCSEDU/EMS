@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  getRole,
-  loginApiCall,
-  saveLoggedInUser,
-  storeRole,
-  storeToken,
-} from "../AuthService";
+import { loginApiCall } from "../AuthService";
+import {useDispatch} from 'react-redux';
+import { addRole, addToken, addUser } from "../redux/userSlice";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  /*
   const role = getRole();
   if (role != null) {
     if (role == "ROLE_ADMIN") navigate("/admin");
     else if (role == "ROLE_STUDENT") navigate("/student");
     else navigate("/teacher");
   }
+  */
 
   const loginHandler = async () => {
     // here check the authentication procedure..
@@ -26,15 +26,11 @@ const Login = () => {
     await loginApiCall(email, password)
       .then((response) => {
         console.log(response.data);
+        dispatch(addUser(email));
+        dispatch(addToken("Bearer "+response.data.accessToken));
+        dispatch(addRole(response.data.role));
+          
 
-        const token = "Bearer " + response.data.accessToken;
-        storeToken(token);
-        storeRole(response.data.role);
-
-        saveLoggedInUser(email);
-        navigate("/admin");
-
-        //window.location.reload(false);
       })
       .catch((error) => {
         console.error(error);
