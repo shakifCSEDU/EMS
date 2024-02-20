@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { STUDENT_IMG_ICON } from "../Service/Constants";
 
 const StudentHomepage = () => {
+  const navigate = useNavigate();
 
-  const [requestStatus,setRequestStatus] = useState("pending");
-
+  const [requestStatus,setRequestStatus] = useState("");
+ 
+  const handleFindAdvisors = ()=>{
+      navigate("/student/find-advisors");
+  }
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -25,27 +29,27 @@ const StudentHomepage = () => {
           type="text"
           placeholder="username"
           defaultValue={""}
-          id="username"
+          
           className="border p-3 rounded-lg "
         />
         <input
           type="text"
           placeholder="email"
-          id="email"
-          defaultValue={""}
+       
+       
           className="border p-3 rounded-lg "
         />
       <input
           type="text"
           placeholder="phone no"
-          id="email"
+       
           defaultValue={""}
           className="border p-3 rounded-lg "
         />
         <input
           type="text"
           placeholder="department name"
-          id="email"
+          
           defaultValue={""}
           className="border p-3 rounded-lg "
         />
@@ -54,7 +58,7 @@ const StudentHomepage = () => {
         <input
           type="password"
           placeholder="password"
-          id="password"
+        
           className="border p-3 rounded-lg "
         />
         {
@@ -73,7 +77,11 @@ const StudentHomepage = () => {
             </div>
             ):(
               <div>
-                here we query and show the advisor id
+                <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80 px-5"
+                  onClick={()=>handleFindAdvisors()}
+                >
+                  find advisors
+                </button>
               </div>
 
             ) 

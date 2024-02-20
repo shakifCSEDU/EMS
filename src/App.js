@@ -8,15 +8,32 @@ import TeacherHomepage from "./Component/TeacherHomepage";
 import { isUserLoggedIn } from "./AuthService";
 import RegisterStudent from "./Component/RegisterStudent";
 import RegisterTeacher from "./Component/RegisterTeacher";
+import Home from "./Component/Home";
+import { useSelector } from "react-redux";
+import ManageStudents from "./Component/ManageStudents";
+import FindAdvisors from "./Component/FindAdvisors";
 
 function App() {
+  const { user } = useSelector((state) => state.user);
+
   const AuthenticatedRoute = ({ children }) => {
-    const isAuth = isUserLoggedIn();
+    const isAuth = user?true:false;
     if (isAuth) {
       return children;
     }
     return <Navigate to="/" />;
   };
+
+  /*
+<Route
+            path="/admin"
+            element={
+              <AuthenticatedRoute>
+                <Admin />
+              </AuthenticatedRoute>
+            }
+          />
+*/
 
   return (
     <>
@@ -25,18 +42,52 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
 
-          <Route
-            path="/admin"
-            element={
-              <AuthenticatedRoute>
-                <Admin />
+          <Route path="/admin" element={
+                 <AuthenticatedRoute>
+                 <Admin />
+               </AuthenticatedRoute>
+           }/>
+         
+          <Route path="/student" element={
+            <AuthenticatedRoute>
+              <StudentHomepage />
+            </AuthenticatedRoute>
+          
+          }/>
+
+          <Route path="/teacher" element={
+                <AuthenticatedRoute>
+                <TeacherHomepage />
               </AuthenticatedRoute>
-            }
-          />
-          <Route path="/admin/add-student" element={<RegisterStudent />} />
-          <Route path="/admin/add-teacher" element = {<RegisterTeacher/>}/>
-          <Route path="/student" element={<StudentHomepage />} />
-          <Route path="/teacher" element={<TeacherHomepage />} />
+            
+          }/>
+          <Route path="/admin/add-student" element={
+                <AuthenticatedRoute>
+                <RegisterStudent />
+              </AuthenticatedRoute>
+            
+          }/>
+          <Route path="/admin/add-teacher" element={
+                <AuthenticatedRoute>
+                <RegisterTeacher />
+              </AuthenticatedRoute>
+            
+          }/>
+          <Route path="/teacher/manage-students" element={
+                <AuthenticatedRoute>
+                <ManageStudents />
+              </AuthenticatedRoute>
+            
+          }/>
+      <Route path="/student/find-advisors" element={
+                <AuthenticatedRoute>
+                <FindAdvisors/>
+              </AuthenticatedRoute>
+            
+          }/>
+
+
+        
         </Routes>
       </BrowserRouter>
     </>

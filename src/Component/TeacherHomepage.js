@@ -1,9 +1,15 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { TEACHER_IMG_ICON } from "../Service/Constants";
 
 const TeacherHomepage = () => {
-  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const handleManageStudents = ()=>{
+    
+    navigate("/teacher/manage-students");
+
+  }
 
   return (
     <div>
@@ -26,27 +32,27 @@ const TeacherHomepage = () => {
             type="text"
             placeholder="username"
             defaultValue={""}
-            id="username"
+           
             className="border p-3 rounded-lg "
           />
           <input
             type="text"
             placeholder="email"
-            id="email"
+           
             defaultValue={""}
             className="border p-3 rounded-lg "
           />
           <input
             type="text"
             placeholder="phone no"
-            id="email"
+           
             defaultValue={""}
             className="border p-3 rounded-lg "
           />
           <input
             type="text"
             placeholder="faculty name"
-            id="email"
+           
             defaultValue={""}
             className="border p-3 rounded-lg "
           />
@@ -54,14 +60,16 @@ const TeacherHomepage = () => {
           <input
             type="password"
             placeholder="password"
-            id="password"
+          
             className="border p-3 rounded-lg "
           />
 
           <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
             update
           </button>
-          <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
+          <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
+            onClick={()=>handleManageStudents()}
+          >
             manage students
           </button>
         </form>
