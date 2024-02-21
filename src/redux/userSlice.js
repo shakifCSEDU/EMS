@@ -54,6 +54,15 @@ const userSlice = createSlice({
       state.user = null;
       state.role = null;
       state.token = null;
+      state.batch_no = null;
+      state.name = null;
+      state.student_id = null;
+      state.teacher_id = null;
+      state.designation = null;
+      state.faculty_name = null;
+      state.id = null;
+      state.department_name = null;
+
     },
   },
 });

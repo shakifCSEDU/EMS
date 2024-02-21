@@ -1,14 +1,22 @@
 import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { TEACHER_IMG_ICON } from "../Service/Constants";
+import { useSelector } from "react-redux";
 
 const TeacherHomepage = () => {
+  const {user,name,designation,faculty_name} = useSelector(state=>state.user);
+
+
+
   const navigate = useNavigate();
 
   const handleManageStudents = ()=>{
     
     navigate("/teacher/manage-students");
 
+  }
+  const handleUpdate = ()=>{
+    
   }
 
   return (
@@ -31,7 +39,7 @@ const TeacherHomepage = () => {
           <input
             type="text"
             placeholder="username"
-            defaultValue={""}
+            defaultValue={name}
            
             className="border p-3 rounded-lg "
           />
@@ -39,32 +47,27 @@ const TeacherHomepage = () => {
             type="text"
             placeholder="email"
            
-            defaultValue={""}
-            className="border p-3 rounded-lg "
-          />
-          <input
-            type="text"
-            placeholder="phone no"
-           
-            defaultValue={""}
+            defaultValue={user}
             className="border p-3 rounded-lg "
           />
           <input
             type="text"
             placeholder="faculty name"
            
-            defaultValue={""}
+            defaultValue={faculty_name}
             className="border p-3 rounded-lg "
           />
 
           <input
             type="password"
-            placeholder="password"
+            placeholder="enter your new password"
           
             className="border p-3 rounded-lg "
           />
 
-          <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
+          <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
+            onClick={()=>handleUpdate()}
+          >
             update
           </button>
           <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"

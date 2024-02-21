@@ -53,55 +53,51 @@ const RegisterTeacher = () => {
           type="text"
           placeholder="Name"
           className="border p-3 rounded-lg"
-          id="username"
+        
           onChange={(e) => setUsername(e.target.value)}
         />
         <input
           type="email"
           placeholder="Email"
           className="border p-3 rounded-lg"
-          id="email"
+        
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
           placeholder="password"
           className="border p-3 rounded-lg"
-          id="password"
+         
           onChange={(e) => setPassword(e.target.value)}
         />
         <input
           type="number"
           placeholder="Phone "
           className="border p-3 rounded-lg"
-          id="phone"
+          
           onChange={(e) => setPhone(e.target.value)}
         />
         <input
           type="text"
           placeholder="faculty name"
           className="border p-3 rounded-lg"
-          id="phone"
+          
           onChange={(e) => setFacultyName(e.target.value)}
         />
         <input
           type="text"
           placeholder="designation"
           className="border p-3 rounded-lg"
-          id="phone"
+         
           onChange={(e) => setDesignation(e.target.value)}
         />
         <input
           type="text"
           placeholder="description"
           className="border p-3 rounded-lg"
-          id="phone"
+      
           onChange={(e) => setDescription(e.target.value)}
         />
-
-
-
-
         <button
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95"
           onClick={() => handleRegister()}

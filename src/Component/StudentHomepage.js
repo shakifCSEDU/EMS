@@ -26,6 +26,10 @@ const StudentHomepage = () => {
   const handleFindAdvisors = ()=>{
       navigate("/student/find-advisors");
   }
+  const handleUpdate = ()=>{
+    
+  }
+
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -98,7 +102,10 @@ const StudentHomepage = () => {
           )
 
         }
-        <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
+        <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
+          onClick={()=>handleUpdate()}
+        
+        >
           update
         </button>
       </form>

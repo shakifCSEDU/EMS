@@ -17,6 +17,7 @@ import axios from "axios";
 function App() {
 
   const { user ,token} = useSelector((state) => state.user);
+
   axios.interceptors.request.use(
     function (config) {
       
@@ -24,14 +25,9 @@ function App() {
       return config;
     },
     function (error) {
-      // Do something with request error
       return Promise.reject(error);
     }
   );
-
-
-
-
 
   const AuthenticatedRoute = ({ children }) => {
     const isAuth = user?true:false;
@@ -40,17 +36,6 @@ function App() {
     }
     return <Navigate to="/" />;
   };
-
-  /*
-<Route
-            path="/admin"
-            element={
-              <AuthenticatedRoute>
-                <Admin />
-              </AuthenticatedRoute>
-            }
-          />
-*/
 
   return (
     <>
