@@ -12,9 +12,26 @@ import Home from "./Component/Home";
 import { useSelector } from "react-redux";
 import ManageStudents from "./Component/ManageStudents";
 import FindAdvisors from "./Component/FindAdvisors";
+import axios from "axios";
 
 function App() {
-  const { user } = useSelector((state) => state.user);
+
+  const { user ,token} = useSelector((state) => state.user);
+  axios.interceptors.request.use(
+    function (config) {
+      
+      config.headers["Authorization"] = token;
+      return config;
+    },
+    function (error) {
+      // Do something with request error
+      return Promise.reject(error);
+    }
+  );
+
+
+
+
 
   const AuthenticatedRoute = ({ children }) => {
     const isAuth = user?true:false;

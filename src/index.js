@@ -10,17 +10,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-axios.interceptors.request.use(
-  function (config) {
-    console.log(getToken());
-    config.headers["Authorization"] = getToken();
-    return config;
-  },
-  function (error) {
-    // Do something with request error
-    return Promise.reject(error);
-  }
-);
+
 
 root.render(
   <Provider store={store}>

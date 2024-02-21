@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginApiCall } from "../AuthService";
-import {useDispatch, useSelector} from 'react-redux';
-import { addId, addName, addRole, addToken, addUser } from "../redux/userSlice";
-
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addBatchNo,
+  addDepartmentName,
+  addDesignation,
+  addFacultyName,
+  addId,
+  addName,
+  addRole,
+  addStudentId,
+  addTeacherId,
+  addToken,
+  addUser,
+} from "../redux/userSlice";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {user} = useSelector((state)=>state.user);
-  
+  const { user } = useSelector((state) => state.user);
+
   const loginHandler = async () => {
     // here check the authentication procedure..
 
@@ -19,23 +30,26 @@ const Login = () => {
       .then((response) => {
         console.log(response.data);
         dispatch(addUser(email));
-        dispatch(addToken("Bearer "+response.data.accessToken));
+        dispatch(addToken("Bearer " + response.data.accessToken));
         dispatch(addName(response.data.name));
         dispatch(addId(response.data.id));
 
-        
-        if(response.data.role === "ROLE_ADMIN")
-        {
+        if (response.data.role === "ROLE_ADMIN") {
           dispatch(addRole("admin"));
           navigate("/admin");
-        }else if(response.data.role === "ROLE_STUDENT"){
+        } else if (response.data.role === "ROLE_STUDENT") {
           dispatch(addRole("student"));
+          dispatch(addStudentId(response.data.student_id));
+          dispatch(addBatchNo(response.data.batch_no));
+          dispatch(addDepartmentName(response.data.department_name));
           navigate("/student");
-        }else{
+        } else {
           dispatch(addRole("teacher"));
+          dispatch(addTeacherId(response.data.teacher_id));
+          dispatch(addDesignation(response.data.designation));
+          dispatch(addFacultyName(response.data.faculty_name));
           navigate("/teacher");
         }
-
       })
       .catch((error) => {
         console.error(error);

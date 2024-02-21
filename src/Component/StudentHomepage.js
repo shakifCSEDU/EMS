@@ -1,12 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { STUDENT_IMG_ICON } from "../Service/Constants";
+import { useSelector } from "react-redux";
+import { AUTH_BASE_API_URL } from "../AuthService";
+import axios from "axios";
 
 const StudentHomepage = () => {
   const navigate = useNavigate();
+  const {user,name,batch_no,department_name,student_id} = useSelector(store=>store.user);
+
+
 
   const [requestStatus,setRequestStatus] = useState("");
  
+  useEffect(()=>{
+      getRequestStatus();
+  },[]);
+
+  const getRequestStatus = async()=>{
+      const response = await axios.get(AUTH_BASE_API_URL+"/student/check-status/"+student_id);
+      setRequestStatus(response.data);
+  }
+
+
   const handleFindAdvisors = ()=>{
       navigate("/student/find-advisors");
   }
@@ -28,37 +44,31 @@ const StudentHomepage = () => {
         <input
           type="text"
           placeholder="username"
-          defaultValue={""}
+          defaultValue={name}
           
           className="border p-3 rounded-lg "
         />
         <input
           type="text"
           placeholder="email"
-       
+          defaultValue={user}
        
           className="border p-3 rounded-lg "
         />
-      <input
-          type="text"
-          placeholder="phone no"
-       
-          defaultValue={""}
-          className="border p-3 rounded-lg "
-        />
+      
         <input
           type="text"
           placeholder="department name"
           
-          defaultValue={""}
+          defaultValue={department_name}
           className="border p-3 rounded-lg "
         />
 
 
         <input
           type="password"
-          placeholder="password"
-        
+          placeholder="enter your new password"
+
           className="border p-3 rounded-lg "
         />
         {
