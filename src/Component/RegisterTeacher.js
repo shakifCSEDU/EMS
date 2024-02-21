@@ -1,29 +1,30 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { AUTH_BASE_API_URL } from '../AuthService';
 import axios from 'axios';
 
 const RegisterTeacher = () => {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [facultyName, setFacultyName] = useState("");
-  const [designation, setDesignation] = useState("");
-  const [description,setDescription] = useState("");
+
+  const username = useRef(null);
+  const email = useRef(null);
+  const password = useRef(null);
+  const phone = useRef(null);
+  const facultyName = useRef(null);
+  const designation = useRef(null);
+  const description = useRef(null);
 
 
   const handleRegister = async ()=>{
     const teacherObj =  {
-      "faculty_name":facultyName,
-      "designation":designation,
+      "faculty_name":facultyName.current.value,
+      "designation":designation.current.value,
         "user": {
-          "username":username,
-          "email": email,
-          "phone": phone,
-          "password":password,
+          "username":username.current.value,
+          "email": email.current.value,
+          "phone": phone.current.value,
+          "password":password.current.value,
           "role":{
               "name":"ROLE_TEACHER",
-              "description":description
+              "description":description.current.value
           }
         }
     }
@@ -53,50 +54,44 @@ const RegisterTeacher = () => {
           type="text"
           placeholder="Name"
           className="border p-3 rounded-lg"
-        
-          onChange={(e) => setUsername(e.target.value)}
+          ref={username}
+          
         />
         <input
           type="email"
           placeholder="Email"
           className="border p-3 rounded-lg"
-        
-          onChange={(e) => setEmail(e.target.value)}
+          ref={email}
         />
         <input
           type="password"
           placeholder="password"
           className="border p-3 rounded-lg"
-         
-          onChange={(e) => setPassword(e.target.value)}
+          ref={password}
         />
         <input
           type="number"
           placeholder="Phone "
           className="border p-3 rounded-lg"
-          
-          onChange={(e) => setPhone(e.target.value)}
+          ref={phone}
         />
         <input
           type="text"
           placeholder="faculty name"
           className="border p-3 rounded-lg"
-          
-          onChange={(e) => setFacultyName(e.target.value)}
+          ref={facultyName}
         />
         <input
           type="text"
           placeholder="designation"
           className="border p-3 rounded-lg"
-         
-          onChange={(e) => setDesignation(e.target.value)}
+          ref={designation}
         />
         <input
           type="text"
           placeholder="description"
           className="border p-3 rounded-lg"
-      
-          onChange={(e) => setDescription(e.target.value)}
+          ref={description}
         />
         <button
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95"
