@@ -1,7 +1,11 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import { AUTH_BASE_API_URL } from '../AuthService';
+import { STUDENT_IMG_ICON } from '../Service/Constants';
 
 const Student = () => {
-
+  const [students,setStudents] = useState([]);
+  /*
   const students = [
     {
       id:1,
@@ -40,39 +44,77 @@ const Student = () => {
       advisorName:"Abu ahmed"
     }
   ]
+  */
 
+
+  // fetch all students
+  useEffect(()=>{
+    getAllStudents();
+  },[]);
+
+  const getAllStudents = async()=>{
+    await axios
+      .get(AUTH_BASE_API_URL + "/students")
+      .then((response) => {
+        console.log(response.data);
+        setStudents(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+
+  const handleActivate = (student_id)=>{
+    console.log('activate!');
+  }
+
+  const handleDeActivate = (student_id)=>{
+    console.log('de-activate!');
+  }
+
+
+
+
+
+  if(students.length === 0)return null;
 
   return (
-    <div className='p-5'>
-      <h1 className='font-bold text-2xl p-5'>Student Info Table</h1>
-      <table className='border border-black'>
-        <thead className='border border-black'>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Department Name</th>
-            <th>Batch no</th>
-            <th>Advisor name</th>
-          </tr>
-        </thead>
-        <tbody>
-        {students.map((student) => (
-            <tr key={student.id}>
-              <td>{student.name}</td>
-              <td>{student.email}</td>
-              <td>{student.phone}</td>
-              <td>{student.departmentName}</td>
-              <td>{student.batchNo}</td>
-              <td>{student.advisorName}</td>
-            </tr>
-          ))}
+    <div className="flex m-5 flex-wrap">
+      {students.map((student) => (
+        <div
+          className="m-2 shadow-lg rounded-lg p-2 bg-gray-200 px-5"
+          key={student.student_id}
+        >
+          <img src={STUDENT_IMG_ICON} alt="teacher_icon" />
 
-        </tbody>
-      </table>
-
+          <h1 className="font-semibold text-2xl">{student.user.username}</h1>
+          <h1 className="">{student.department_name}</h1>
+          <h1>{student.batch_no}</h1>
+          <h1>{student?.user?.phone}</h1>
+          <h1>{student?.user?.role?.description}</h1>
+          {student.user.status === false ? (
+            <div className="">
+              <button
+                className="bg-green-600 m-2 text-center bg-center p-2 text-white rounded-lg"
+                onClick={() => handleActivate(student.student_id)}
+              >
+                Activate
+              </button>
+              
+            </div>
+          ) : (
+            <button
+              className="bg-blue-600 m-2 text-center bg-center p-1 text-white rounded-lg"
+              onClick={() => handleDeActivate(student.student_id)}
+            >
+              De Activate
+            </button>
+          )}
+        </div>
+      ))}
     </div>
-  )
+  );
 }
 
 export default Student
