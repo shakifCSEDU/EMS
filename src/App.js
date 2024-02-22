@@ -13,14 +13,13 @@ import { useSelector } from "react-redux";
 import ManageStudents from "./Component/ManageStudents";
 import FindAdvisors from "./Component/FindAdvisors";
 import axios from "axios";
+import WatingUser from "./Component/WatingUser";
 
 function App() {
-
-  const { user ,token} = useSelector((state) => state.user);
+  const { user, token } = useSelector((state) => state.user);
 
   axios.interceptors.request.use(
     function (config) {
-      
       config.headers["Authorization"] = token;
       return config;
     },
@@ -30,7 +29,7 @@ function App() {
   );
 
   const AuthenticatedRoute = ({ children }) => {
-    const isAuth = user?true:false;
+    const isAuth = user ? true : false;
     if (isAuth) {
       return children;
     }
@@ -44,52 +43,51 @@ function App() {
         <Routes>
           <Route path="/" element={<Login />} />
 
-          <Route path="/admin" element={
-                 <AuthenticatedRoute>
-                 <Admin />
-               </AuthenticatedRoute>
-           }/>
-         
-          <Route path="/student" element={
-            <AuthenticatedRoute>
-              <StudentHomepage />
-            </AuthenticatedRoute>
-          
-          }/>
+          <Route
+            path="/admin"
+            element={
+              <AuthenticatedRoute>
+                <Admin />
+              </AuthenticatedRoute>
+            }
+          />
 
-          <Route path="/teacher" element={
-                <AuthenticatedRoute>
+          <Route
+            path="/student"
+            element={
+              <AuthenticatedRoute>
+                <StudentHomepage />
+              </AuthenticatedRoute>
+            }
+          />
+
+          <Route
+            path="/teacher"
+            element={
+              <AuthenticatedRoute>
                 <TeacherHomepage />
               </AuthenticatedRoute>
-            
-          }/>
-          <Route path="/admin/add-student" element={
-                <AuthenticatedRoute>
-                <RegisterStudent />
-              </AuthenticatedRoute>
-            
-          }/>
-          <Route path="/admin/add-teacher" element={
-                <AuthenticatedRoute>
-                <RegisterTeacher />
-              </AuthenticatedRoute>
-            
-          }/>
-          <Route path="/teacher/manage-students" element={
-                <AuthenticatedRoute>
+            }
+          />
+          <Route path="/register-student" element={<RegisterStudent />} />
+          <Route path="/register-teacher" element={<RegisterTeacher />} />
+          <Route path="/wait-user" element={<WatingUser/>}/>
+          <Route
+            path="/teacher/manage-students"
+            element={
+              <AuthenticatedRoute>
                 <ManageStudents />
               </AuthenticatedRoute>
-            
-          }/>
-      <Route path="/student/find-advisors" element={
-                <AuthenticatedRoute>
-                <FindAdvisors/>
+            }
+          />
+          <Route
+            path="/student/find-advisors"
+            element={
+              <AuthenticatedRoute>
+                <FindAdvisors />
               </AuthenticatedRoute>
-            
-          }/>
-
-
-        
+            }
+          />
         </Routes>
       </BrowserRouter>
     </>

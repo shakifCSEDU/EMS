@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginApiCall } from "../AuthService";
+import { AUTH_BASE_API_URL, loginApiCall } from "../AuthService";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addBatchNo,
@@ -15,46 +15,83 @@ import {
   addToken,
   addUser,
 } from "../redux/userSlice";
+import axios from "axios";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const email = useRef(null);
+
+  const password = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
 
   const loginHandler = async () => {
     // here check the authentication procedure..
 
-    await loginApiCall(email, password)
+    const loginObj = {
+      usernameOrEmail: email.current.value,
+      password: password.current.value,
+    };
+
+    await axios
+      .post(AUTH_BASE_API_URL + "/login", loginObj)
       .then((response) => {
         console.log(response.data);
+
         dispatch(addUser(email));
         dispatch(addToken("Bearer " + response.data.accessToken));
         dispatch(addName(response.data.name));
-        dispatch(addId(response.data.id));
+       dispatch(addId(response.data.id));
+       dispatch(addRole(response.data.name));
+
 
         if (response.data.role === "ROLE_ADMIN") {
-          dispatch(addRole("admin"));
-          navigate("/admin");
-        } else if (response.data.role === "ROLE_STUDENT") {
-          dispatch(addRole("student"));
-          dispatch(addStudentId(response.data.student_id));
-          dispatch(addBatchNo(response.data.batch_no));
-          dispatch(addDepartmentName(response.data.department_name));
-          navigate("/student");
-        } else {
-          dispatch(addRole("teacher"));
-          dispatch(addTeacherId(response.data.teacher_id));
-          dispatch(addDesignation(response.data.designation));
-          dispatch(addFacultyName(response.data.faculty_name));
-          navigate("/teacher");
+          navigate('/admin');
         }
       })
-      .catch((error) => {
-        console.error(error);
+      .catch((err) => {
+        console.log(err);
       });
+
+    //     console.error(error);
+    //   });
+
+    // await loginApiCall(email, password)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     dispatch(addUser(email));
+    //     dispatch(addToken("Bearer " + response.data.accessToken));
+    //     dispatch(addName(response.data.name));
+    //     dispatch(addId(response.data.id));
+
+    //     if (response.data.role === "ROLE_ADMIN") {
+    //       dispatch(addRole("admin"));
+    //       navigate("/admin");
+    //     } else if (response.data.role === "ROLE_STUDENT") {
+    //       dispatch(addRole("student"));
+    //       dispatch(addStudentId(response.data.student_id));
+    //       dispatch(addBatchNo(response.data.batch_no));
+    //       dispatch(addDepartmentName(response.data.department_name));
+    //       navigate("/student");
+    //     } else {
+    //       dispatch(addRole("teacher"));
+    //       dispatch(addTeacherId(response.data.teacher_id));
+    //       dispatch(addDesignation(response.data.designation));
+    //       dispatch(addFacultyName(response.data.faculty_name));
+    //       navigate("/teacher");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   };
+  const handleRegisterStudent = ()=>{
+    navigate('/register-student');
+
+  }
+  const handleRegisterTeacher = ()=>{
+    navigate('/register-teacher');
+  }
+
 
   return (
     <div>
@@ -68,16 +105,14 @@ const Login = () => {
             type="email"
             placeholder="Email"
             className="border p-3 rounded-lg"
-            id="email"
-            onChange={(e) => setEmail(e.target.value)}
+            ref={email}
           />
 
           <input
             type="password"
             placeholder="password"
             className="border p-3 rounded-lg"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
+            ref={password}
           />
           <button
             className="font-semibold text-white mx-5 border p-3 bg-blue-600 rounded-lg hover:opacity-80"
@@ -85,6 +120,19 @@ const Login = () => {
           >
             Log in
           </button>
+          <div className="flex font-semibold">
+            Register an account
+            <h1 className="mx-3 text-green-600 font-semibold hover:cursor-pointer underline"
+              onClick={()=>handleRegisterStudent()}
+            >
+              Student
+            </h1>
+            <h1 className="text-blue-600 font-semibold hover:cursor-pointer underline"
+              onClick={()=>handleRegisterTeacher()}
+            >
+              Teacher
+            </h1>
+          </div>
         </form>
       </div>
     </div>

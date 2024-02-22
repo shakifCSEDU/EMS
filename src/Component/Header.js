@@ -33,22 +33,6 @@ const Header = () => {
           Education Management System
         </h1>
         <div className="flex gap-2">
-          {role === "admin" && (
-            <div>
-              <button className="p-4 mx-5 border bg-green-600 rounded-lg text-white font-semibold hover:opacity-80"
-                onClick={()=>handleAddStudent()}
-              >
-                Add Student
-              </button>
-
-              <button className="p-4 mx-5 border bg-blue-600 rounded-lg text-white font-semibold hover:opacity-80"
-                onClick={()=>handleAddTeacher()}
-              
-              >
-                Add Teacher
-              </button>
-            </div>
-          )}
           {isAuth && (
             <button className="p-4 mx-5 border bg-red-600 rounded-lg text-white font-bold hover:opacity-80"
               onClick={()=>handleLogout()}

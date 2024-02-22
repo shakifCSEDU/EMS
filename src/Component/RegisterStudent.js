@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { useRef, useState } from "react";
 import { AUTH_BASE_API_URL, getToken } from "../AuthService";
+import { useNavigate } from "react-router-dom";
 
 const RegisterStudent = () => {
-  // Add a request interceptor
   
+  const navigate = useNavigate();
+
   const username = useRef(null);
   const email  = useRef(null);
   const password = useRef(null);
@@ -31,12 +33,12 @@ const RegisterStudent = () => {
       "teacher":null
       }
     
-    console.log("called APi");
-    
     await axios
       .post(AUTH_BASE_API_URL + "/register-student", studentObj)
       .then((response) => {
         console.log(response.data);
+        navigate("/wait-user");
+
       })
       .catch((error) => {
         console.error(error);

@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { AUTH_BASE_API_URL } from '../AuthService';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterTeacher = () => {
 
@@ -12,6 +13,7 @@ const RegisterTeacher = () => {
   const designation = useRef(null);
   const description = useRef(null);
 
+  const navigate = useNavigate();
 
   const handleRegister = async ()=>{
     const teacherObj =  {
@@ -33,6 +35,7 @@ const RegisterTeacher = () => {
       .post(AUTH_BASE_API_URL + "/register-teacher", teacherObj)
       .then((response) => {
         console.log(response.data);
+        navigate("/wait-user");
       })
       .catch((error) => {
         console.error(error);
