@@ -1,11 +1,17 @@
-import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useRef } from "react";
+import { useNavigate} from "react-router-dom";
 import { TEACHER_IMG_ICON } from "../Service/Constants";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import { AUTH_BASE_API_URL } from "../AuthService";
 
 const TeacherHomepage = () => {
-  const {user,name,designation,faculty_name} = useSelector(state=>state.user);
-
+  const {user,name,designation,faculty_name,teacher_id} = useSelector(state=>state.user);
+  
+  const username = useRef(name);
+  const email = useRef(user);
+  const password = useRef(null);
+  const facultyName = useRef(faculty_name);
 
 
   const navigate = useNavigate();
@@ -15,8 +21,24 @@ const TeacherHomepage = () => {
     navigate("/teacher/manage-students");
 
   }
-  const handleUpdate = ()=>{
-    
+  const handleUpdate =async ()=>{
+      const newTeacherObj = {
+        "teacher_id":teacher_id,
+        "faculty_name":facultyName?.current?.value,
+        "user":{
+            "username":username?.current?.value,
+            "email":email?.current?.value
+        }
+    }
+    await axios
+    .post(AUTH_BASE_API_URL + "/update-teacher", newTeacherObj)
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
   }
 
   return (
@@ -40,20 +62,20 @@ const TeacherHomepage = () => {
             type="text"
             placeholder="username"
             defaultValue={name}
-           
+            ref={username}
             className="border p-3 rounded-lg "
           />
           <input
             type="text"
             placeholder="email"
-           
+            ref={email}
             defaultValue={user}
             className="border p-3 rounded-lg "
           />
           <input
             type="text"
             placeholder="faculty name"
-           
+            ref={facultyName}
             defaultValue={faculty_name}
             className="border p-3 rounded-lg "
           />
@@ -61,7 +83,7 @@ const TeacherHomepage = () => {
           <input
             type="password"
             placeholder="enter your new password"
-          
+            ref={password}
             className="border p-3 rounded-lg "
           />
 

@@ -60,12 +60,26 @@ const Teacher = () => {
       });
   };
 
-  const handleActivate= (teacher_id) => {
-    console.log('active');
+  const handleActivate= async(user_id) => {
+    await axios
+      .get(AUTH_BASE_API_URL + "/activate-user/"+user_id)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
   };
-  const handleDeActivate = (teacher_id)=>{
-    console.log('de-activate');
+  const handleDeActivate =async (user_id)=>{
+    await axios
+    .get(AUTH_BASE_API_URL + "/deactivate-user/"+user_id)
+    .then((response) => {
+      console.log(response.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   };
 
 
@@ -88,7 +102,7 @@ const Teacher = () => {
                 <div className="">
                   <button
                     className="bg-green-600 m-2 text-center bg-center p-2 text-white rounded-lg"
-                    onClick={() => handleActivate(teacher.teacher_id)}
+                    onClick={() => handleActivate(teacher?.user?.id)}
                   >
                     Activate
                   </button>
@@ -97,7 +111,7 @@ const Teacher = () => {
               ) : (
                 <button
                   className="bg-blue-600 m-2 text-center bg-center p-1 text-white rounded-lg"
-                  onClick={() => handleDeActivate(teacher.teacher_id)}
+                  onClick={() => handleDeActivate(teacher?.user?.id)}
                 >
                   De Activate
                 </button>
