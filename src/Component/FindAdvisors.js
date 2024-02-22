@@ -62,7 +62,7 @@ const FindAdvisors = () => {
             </button>
 
           ) : (
-            <div className="text-red-700 p-2 text-white">
+            <div className="text-red-700 p-2">
                This teacher is now unavailable 
 
             </div>

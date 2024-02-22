@@ -56,7 +56,7 @@ const Student = () => {
     await axios
       .get(AUTH_BASE_API_URL + "/students")
       .then((response) => {
-        console.log(response.data);
+        //console.log(response.data);
         setStudents(response.data);
       })
       .catch((err) => {

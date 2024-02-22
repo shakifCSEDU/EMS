@@ -1,7 +1,12 @@
-import React from 'react'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { AUTH_BASE_API_URL } from "../AuthService";
+import { TEACHER_IMG_ICON } from "../Service/Constants";
 
 const Teacher = () => {
-  
+  const [teachers, setTeachers] = useState([]);
+
+  /*
   const teachers = [
     {
       id:1,
@@ -37,40 +42,71 @@ const Teacher = () => {
     },
     
   ]
+  */
+
+  useEffect(() => {
+    getAllTeachers();
+  }, []);
+
+  const getAllTeachers = async () => {
+    await axios
+      .get(AUTH_BASE_API_URL + "/teachers")
+      .then((response) => {
+        console.log(response.data);
+        setTeachers(response.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleActivate= (teacher_id) => {
+    console.log('active');
+
+  };
+  const handleDeActivate = (teacher_id)=>{
+    console.log('de-activate');
+  };
 
 
+  if(teachers.length ===0)return null;
   return (
-    <div className='p-5'>
-      <h1 className='font-bold text-2xl p-5'>Teacher info table</h1>
-      <table className='border border-black'>
-        <thead className='border border-black'>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Faculty Name</th>
-            <th>Designation</th>
-          </tr>
-        </thead>
-        <tbody>
-        {teachers.map((teacher) => (
-            <tr key={teacher.id}>
-              <td>{teacher.name}</td>
-              <td>{teacher.email}</td>
-              <td>{teacher.phone}</td>
-              <td>{teacher.facultyName}</td>
-              <td>{teacher.designation}</td>
-            </tr>
-          ))}
-
-        </tbody>
-      </table>
-
+    <div className="flex m-5 flex-wrap">
+      {teachers.map((teacher) => (
+        <div
+          className="m-2 shadow-lg rounded-lg p-2 bg-gray-200"
+          key={teacher.teacher_id}
+        >
+          <img src={TEACHER_IMG_ICON} alt="teacher_icon" />
+          <h1 className="font-semibold text-2xl">{teacher.user.username}</h1>
+          <h1 className="">{teacher.faculty_name}</h1>
+          <h1>{teacher?.designation}</h1>
+          <h1>{teacher?.user?.phone}</h1>
+          <h1>{teacher?.user?.role?.description}</h1>
+          {
+              teacher.user.status === false ? (
+                <div className="">
+                  <button
+                    className="bg-green-600 m-2 text-center bg-center p-2 text-white rounded-lg"
+                    onClick={() => handleActivate(teacher.teacher_id)}
+                  >
+                    Activate
+                  </button>
+                  
+                </div>
+              ) : (
+                <button
+                  className="bg-blue-600 m-2 text-center bg-center p-1 text-white rounded-lg"
+                  onClick={() => handleDeActivate(teacher.teacher_id)}
+                >
+                  De Activate
+                </button>
+              )
+          }
+        </div>
+      ))}
     </div>
+  );
+};
 
-
-
-  )
-}
-
-export default Teacher
+export default Teacher;
