@@ -9,17 +9,24 @@ const StudentHomepage = () => {
   const navigate = useNavigate();
   const {user,name,batch_no,department_name,student_id} = useSelector(store=>store.user);
 
-
-
-  const [requestStatus,setRequestStatus] = useState("");
+  const [requestStatus,setRequestStatus] = useState("w");
  
   useEffect(()=>{
       getRequestStatus();
   },[]);
 
   const getRequestStatus = async()=>{
-      const response = await axios.get(AUTH_BASE_API_URL+"/student/check-status/"+student_id);
-      setRequestStatus(response.data);
+      
+      await axios
+      .get(AUTH_BASE_API_URL+"/student/check-status/"+student_id)
+      .then((response) => {
+        setRequestStatus(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+      
   }
 
 

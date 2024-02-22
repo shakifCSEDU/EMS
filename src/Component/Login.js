@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AUTH_BASE_API_URL, loginApiCall } from "../AuthService";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import {
   addBatchNo,
   addDepartmentName,
@@ -28,8 +28,8 @@ const Login = () => {
     // here check the authentication procedure..
 
     const loginObj = {
-      usernameOrEmail: email.current.value,
-      password: password.current.value,
+      usernameOrEmail: email?.current?.value,
+      password: password?.current?.value,
     };
 
     await axios
@@ -37,53 +37,42 @@ const Login = () => {
       .then((response) => {
         console.log(response.data);
 
-        dispatch(addUser(email));
+        dispatch(addUser(email?.current?.value));
         dispatch(addToken("Bearer " + response.data.accessToken));
         dispatch(addName(response.data.name));
-       dispatch(addId(response.data.id));
-       dispatch(addRole(response.data.name));
+        dispatch(addId(response.data.id));
+        dispatch(addRole(response.data.role));
 
+        const role = response.data.role;
+        const status = response.data.status;
 
         if (response.data.role === "ROLE_ADMIN") {
+
           navigate('/admin');
+        }
+        else if(role === "ROLE_STUDENT"){
+          dispatch(addStudentId(response.data.student_id));
+          dispatch(addBatchNo(response.data.batch_no));
+          dispatch(addDepartmentName(response.data.department_name));
+          if(status)
+            navigate("/student");
+          else
+            navigate("/wait-user");
+        }else{
+       
+          dispatch(addTeacherId(response.data.teacher_id));
+          dispatch(addDesignation(response.data.designation));
+          dispatch(addFacultyName(response.data.faculty_name));
+          if(status)
+            navigate("/teacher");
+          else
+            navigate("/wait-user");  
         }
       })
       .catch((err) => {
         console.log(err);
       });
-
-    //     console.error(error);
-    //   });
-
-    // await loginApiCall(email, password)
-    //   .then((response) => {
-    //     console.log(response.data);
-    //     dispatch(addUser(email));
-    //     dispatch(addToken("Bearer " + response.data.accessToken));
-    //     dispatch(addName(response.data.name));
-    //     dispatch(addId(response.data.id));
-
-    //     if (response.data.role === "ROLE_ADMIN") {
-    //       dispatch(addRole("admin"));
-    //       navigate("/admin");
-    //     } else if (response.data.role === "ROLE_STUDENT") {
-    //       dispatch(addRole("student"));
-    //       dispatch(addStudentId(response.data.student_id));
-    //       dispatch(addBatchNo(response.data.batch_no));
-    //       dispatch(addDepartmentName(response.data.department_name));
-    //       navigate("/student");
-    //     } else {
-    //       dispatch(addRole("teacher"));
-    //       dispatch(addTeacherId(response.data.teacher_id));
-    //       dispatch(addDesignation(response.data.designation));
-    //       dispatch(addFacultyName(response.data.faculty_name));
-    //       navigate("/teacher");
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
-  };
+    }
   const handleRegisterStudent = ()=>{
     navigate('/register-student');
 
