@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { AUTH_BASE_API_URL } from '../AuthService';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import OAuth from './OAuth';
 
 const RegisterTeacher = () => {
 
@@ -102,6 +103,7 @@ const RegisterTeacher = () => {
         >
           Register
         </button>
+        <OAuth doAction="register-teacher"/>
       </form>
     </div>
   </div>

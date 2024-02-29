@@ -89,12 +89,13 @@ const Student = () => {
 
 
 
-
-
   if(students.length === 0)return null;
 
   return (
-    <div className="flex m-5 flex-wrap">
+    <div >
+      <h1 className='text-2xl text-purple-600  font-bold text-center'>List of All Students</h1>
+      <div className="flex m-5 flex-wrap">
+      
       {students.map((student) => (
         <div
           className="m-2 shadow-lg rounded-lg p-2 bg-gray-200 px-5"
@@ -127,6 +128,9 @@ const Student = () => {
           )}
         </div>
       ))}
+
+      </div>
+
     </div>
   );
 }

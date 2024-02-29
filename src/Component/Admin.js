@@ -2,6 +2,7 @@ import React from "react";
 import Student from "./Student";
 import Teacher from "./Teacher";
 import { ADMIN_IMG_ICON } from "../Service/Constants";
+import WaitingForRole from "./WaitingForRole";
 
 const Admin = () => {
   return (
@@ -17,6 +18,11 @@ const Admin = () => {
           cursor-pointer self-center mt-2 mx-auto"
         />
       </div>
+
+
+      <WaitingForRole/>
+      
+      
       <Student />
       <Teacher />
     </div>

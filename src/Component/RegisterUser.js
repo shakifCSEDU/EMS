@@ -4,7 +4,7 @@ import { AUTH_BASE_API_URL, getToken } from "../AuthService";
 import { useNavigate } from "react-router-dom";
 import OAuth from "./OAuth";
 
-const RegisterStudent = () => {
+const RegisterUser = () => {
   
   const navigate = useNavigate();
 
@@ -13,29 +13,17 @@ const RegisterStudent = () => {
   const password = useRef(null);
   const phone = useRef(null);
 
-  const departmentName = useRef(null);
-  const batchNo = useRef(null);
-  const description = useRef(null);
 
   const handleRegister = async () => {
-    const studentObj = {
-      "department_name":departmentName.current?.value,
-      "batch_no": batchNo.current?.value,
-      "user": {
-        "username":username.current?.value,
-        "email": email.current?.value,
-        "phone": phone.current?.value,
-        "password":password.current?.value,
-        "role":{
-            "name":"ROLE_STUDENT",
-            "description":description.current?.value
-        }
-      },
-      "teacher":null
+    const userObj = {
+          "username" : username?.current?.value,
+          "email" : email?.current?.value,
+          "password":password?.current?.value,
+          "phone":phone?.current?.value,
+          "role":null
       }
-    
-    await axios
-      .post(AUTH_BASE_API_URL + "/register-student", studentObj)
+     await axios
+      .post(AUTH_BASE_API_URL + "/register-user", userObj)
       .then((response) => {
         console.log(response.data);
         navigate("/wait-user");
@@ -50,7 +38,7 @@ const RegisterStudent = () => {
     <div>
       <div className="p-2 max-w-lg mx-auto">
         <h1 className="text-3xl text-center font-semibold my-7">
-          Register Student for EMS
+          Register an User Account 
         </h1>
         <form
           onSubmit={(e) => e.preventDefault()}
@@ -80,35 +68,17 @@ const RegisterStudent = () => {
             className="border p-3 rounded-lg"
             ref={phone}
           />
-          <input
-            type="text"
-            placeholder="department name"
-            className="border p-3 rounded-lg"
-            ref={departmentName}
-          />
-          <input
-            type="text"
-            placeholder="batch no"
-            className="border p-3 rounded-lg"
-            ref={batchNo}
-          />
-          <input
-            type="text"
-            placeholder="description"
-            className="border p-3 rounded-lg"
-            ref={description}
-          />
           <button
             type="button" className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95"
             onClick={() => handleRegister()}
           >
             Register
           </button>
-          <OAuth doAction="register-student"/>
+          <OAuth doAction="register-user"/>
         </form>
       </div>
     </div>
   );
 };
 
-export default RegisterStudent;
+export default RegisterUser;

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AUTH_BASE_API_URL, loginApiCall } from "../AuthService";
-import { useDispatch} from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   addBatchNo,
   addDepartmentName,
@@ -16,11 +16,12 @@ import {
   addUser,
 } from "../redux/userSlice";
 import axios from "axios";
+import OAuth from "./OAuth";
 
 const Login = () => {
   const email = useRef(null);
-
   const password = useRef(null);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -36,50 +37,36 @@ const Login = () => {
       .post(AUTH_BASE_API_URL + "/login", loginObj)
       .then((response) => {
         console.log(response.data);
-
-        dispatch(addUser(email?.current?.value));
         dispatch(addToken("Bearer " + response.data.accessToken));
-        dispatch(addName(response.data.name));
-        dispatch(addId(response.data.id));
         dispatch(addRole(response.data.role));
 
         const role = response.data.role;
-        const status = response.data.status;
-
+        
         if (response.data.role === "ROLE_ADMIN") {
-
-          navigate('/admin');
-        }
-        else if(role === "ROLE_STUDENT"){
-          dispatch(addStudentId(response.data.student_id));
-          dispatch(addBatchNo(response.data.batch_no));
-          dispatch(addDepartmentName(response.data.department_name));
-          if(status)
-            navigate("/student");
-          else
-            navigate("/wait-user");
-        }else{
-       
-          dispatch(addTeacherId(response.data.teacher_id));
-          dispatch(addDesignation(response.data.designation));
-          dispatch(addFacultyName(response.data.faculty_name));
-          if(status)
-            navigate("/teacher");
-          else
-            navigate("/wait-user");  
+          navigate("/admin");
+        } else if (role === "ROLE_STUDENT") {
+          navigate("/student");
+          
+        } else {
+          navigate("/teacher");
         }
       })
       .catch((err) => {
         console.log(err);
       });
-    }
-  const handleRegisterStudent = ()=>{
-    navigate('/register-student');
+  };
+  const handleRegisterStudent = () => {
+    navigate("/register-student");
+  };
+  const handleRegisterTeacher = () => {
+    navigate("/register-teacher");
+  };
+
+  const handleRegisterUser = ()=>{
+    navigate("/register-user");
 
   }
-  const handleRegisterTeacher = ()=>{
-    navigate('/register-teacher');
-  }
+
 
 
   return (
@@ -109,18 +96,30 @@ const Login = () => {
           >
             Log in
           </button>
+          <OAuth doAction="login"/>
           <div className="flex font-semibold">
             Register an account
-            <h1 className="mx-3 text-green-600 font-semibold hover:cursor-pointer underline"
-              onClick={()=>handleRegisterStudent()}
+            <h1
+              className="mx-3 text-green-600 font-semibold hover:cursor-pointer underline"
+              onClick={() => handleRegisterStudent()}
             >
               Student
             </h1>
-            <h1 className="text-blue-600 font-semibold hover:cursor-pointer underline"
-              onClick={()=>handleRegisterTeacher()}
+            <h1
+              className="text-blue-600 font-semibold hover:cursor-pointer underline mx-3"
+              onClick={() => handleRegisterTeacher()}
             >
               Teacher
             </h1>
+            <h1
+              className="text-blue-600 font-semibold hover:cursor-pointer underline"
+              onClick={() => handleRegisterUser()}
+            >
+              User
+            </h1>
+
+
+
           </div>
         </form>
       </div>

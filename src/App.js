@@ -14,9 +14,10 @@ import ManageStudents from "./Component/ManageStudents";
 import FindAdvisors from "./Component/FindAdvisors";
 import axios from "axios";
 import WatingUser from "./Component/WatingUser";
+import RegisterUser from "./Component/RegisterUser";
 
 function App() {
-  const { user, token } = useSelector((state) => state.user);
+  const {token} = useSelector((state) => state.user);
 
   axios.interceptors.request.use(
     function (config) {
@@ -29,7 +30,7 @@ function App() {
   );
 
   const AuthenticatedRoute = ({ children }) => {
-    const isAuth = user ? true : false;
+    const isAuth = token ? true : false;
     if (isAuth) {
       return children;
     }
@@ -71,7 +72,8 @@ function App() {
           />
           <Route path="/register-student" element={<RegisterStudent />} />
           <Route path="/register-teacher" element={<RegisterTeacher />} />
-          <Route path="/wait-user" element={<WatingUser/>}/>
+          <Route path="/register-user" element={<RegisterUser/>}/>
+          <Route path="/wait-user" element={<WatingUser />} />
           <Route
             path="/teacher/manage-students"
             element={

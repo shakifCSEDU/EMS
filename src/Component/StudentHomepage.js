@@ -1,64 +1,73 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { STUDENT_IMG_ICON } from "../Service/Constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AUTH_BASE_API_URL } from "../AuthService";
 import axios from "axios";
+import { addBatchNo, addDepartmentName, addId, addName, addStudentId } from "../redux/userSlice";
 
 const StudentHomepage = () => {
   const navigate = useNavigate();
-  const { user, name, department_name, student_id } = useSelector(
-    (store) => store.user
-  );
+  const { token } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+
 
   const [requestStatus, setRequestStatus] = useState("");
-  const email = useRef(user);
-  const username = useRef(name);
-  const departmentName = useRef(department_name);
+  const email = useRef(null);
+  const username = useRef(null);
+  const departmentName = useRef(null);
   const password = useRef(null);
 
   useEffect(() => {
-    getRequestStatus();
+    const tok = token.split(" ")[1];
+    const queryString = new URLSearchParams({"token":tok}).toString();
+    const requestURL = `${AUTH_BASE_API_URL + "/student/getAllInfo"}?${queryString}`;
+    getAllStudentInfo(requestURL);
   }, []);
 
-  const getRequestStatus = async () => {
-    await axios
-      .get(AUTH_BASE_API_URL + "/student/check-status/" + student_id)
+  const getAllStudentInfo = async (requestURL) => {
+   await axios
+      .get(requestURL)
       .then((response) => {
-        setRequestStatus(response.data);
+        const status = response.data.status;
+        if(status){
+          
+          dispatch(addName(response.data.name));
+          dispatch(addId(response.data.id));
+          dispatch(addStudentId(response.data.student_id));
+          dispatch(addDepartmentName(response.data.department_name));
+          dispatch(addBatchNo(response.data.batch_no));
+        }else
+          navigate("/wait-user");
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
 
   const handleFindAdvisors = () => {
     navigate("/student/find-advisors");
   };
   const handleUpdate = async () => {
     // update student profile himself
-
-    const newStudentObj = {
-      student_id: student_id,
-      department_name: departmentName?.current?.value,
-      user: {
-        username: username.current?.value,
-        email: email.current?.value,
-        password: password.current?.value,
-      },
-    };
-
-    await axios
-      .post(AUTH_BASE_API_URL + "/update-student", newStudentObj)
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-
-
-
+    // const newStudentObj = {
+    //   student_id: student_id,
+    //   department_name: departmentName?.current?.value,
+    //   user: {
+    //     username: username.current?.value,
+    //     email: email.current?.value,
+    //     password: password.current?.value,
+    //   },
+    // };
+    // await axios
+    //   .post(AUTH_BASE_API_URL + "/update-student", newStudentObj)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   };
 
   return (
@@ -80,14 +89,14 @@ const StudentHomepage = () => {
         <input
           type="text"
           placeholder="username"
-          defaultValue={name}
+          defaultValue={""}
           ref={username}
           className="border p-3 rounded-lg "
         />
         <input
           type="text"
           placeholder="email"
-          defaultValue={user}
+          defaultValue={""}
           ref={email}
           className="border p-3 rounded-lg "
         />
@@ -96,7 +105,7 @@ const StudentHomepage = () => {
           type="text"
           placeholder="department name"
           ref={departmentName}
-          defaultValue={department_name}
+          defaultValue={""}
           className="border p-3 rounded-lg "
         />
 
